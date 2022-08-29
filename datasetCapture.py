@@ -1,25 +1,27 @@
 import cv2
 import os
 
+
 def assure_path_exists(path):
     dir = os.path.dirname(path)
     if not os.path.exists(dir):
         os.makedirs(dir)
 
-def index(face_id,name):
-    # Start capturing video 
+
+def index(face_id, name):
+    # Start capturing video
     vid_cam = cv2.VideoCapture(0)
 
     # Detect object in video stream using Haarcascade Frontal Face
-    face_detector = cv2.CascadeClassifier('C:/Users/Raj/Desktop/cascades/data/haarcascade_frontalface_default.xml')
+    face_detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
     # Initialize sample face image
     count = 0
 
-    assure_path_exists("C:/Users/Raj/Desktop/dataset/")
+    assure_path_exists("dataset/")
 
     # Start looping
-    while(True):
+    while (True):
 
         # Capture video frame
         _, image_frame = vid_cam.read()
@@ -31,16 +33,17 @@ def index(face_id,name):
         faces = face_detector.detectMultiScale(gray, 1.3, 5)
 
         # Loops for each faces
-        for (x,y,w,h) in faces:
+        for (x, y, w, h) in faces:
 
             # Crop the image frame into rectangle
-            cv2.rectangle(image_frame, (x,y), (x+w,y+h), (255,0,0), 2)
-            
+            cv2.rectangle(image_frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+
             # Increment sample face image
             count += 1
 
             # Save the captured image into the datasets folder
-            cv2.imwrite("C:/Users/Raj/Desktop/dataset/" + str(name) + str(face_id) + '.' + str(count) + ".jpg", gray[y:y+h,x:x+w])
+            cv2.imwrite("dataset/" + str(name) + str(face_id) +
+                        '.' + str(count) + ".jpg", gray[y:y+h, x:x+w])
 
             # Display the video frame, with bounded rectangle on the person's face
             cv2.imshow('frame', image_frame)
@@ -50,7 +53,7 @@ def index(face_id,name):
             break
 
         # If image taken reach 100, stop taking video
-        elif count>=30:
+        elif count >= 30:
             print("Successfully Captured")
             break
 
